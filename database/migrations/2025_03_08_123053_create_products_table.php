@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->integer('price', false, true);
             $table->unsignedBigInteger('order_sale_id');
             $table->foreign('order_sale_id')->references('id')->on('order_sales')->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\User::class)->constrained();
             $table->timestamps();
         });
     }
