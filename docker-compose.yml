@@ -1,0 +1,52 @@
+version: '3.1'
+services:
+    
+    mysql:
+        image: 'mysql:8.0'
+        working_dir: /application
+        volumes:
+            - '.:/application'
+            - './phpdocker/mysql/mysql.ini:/etc/mysql/conf.d/custom.cnf'
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=laravel
+            - MYSQL_USER=ballast
+            - MYSQL_PASSWORD=dev
+        ports:
+            - '3306:3306'
+
+    traefik:
+        image: traefik:v2.5
+        container_name: ballast-traefik
+        command:
+            - "--api.insecure=true"
+            - "--providers.docker=true"
+            - "--entrypoints.web.address=:80"
+        ports:        
+            - "8080:8080"  # Dashboard
+        volumes:
+            - "/var/run/docker.sock:/var/run/docker.sock"       
+
+    app:
+        build:
+            context: .
+        command: ["supervisord","-n", "-c", "/etc/supervisord.conf"]
+        container_name: ballast-app
+        hostname: "ballast.intranet"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.app.rule=Host(`ballast.intranet`)"
+            - "traefik.http.services.app.loadbalancer.server.port=80"
+            - "traefik.http.routers.app.entrypoints=web"
+        volumes:
+            - '.:/application'
+            - './phpdocker/php-fpm/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini'
+            - './phpdocker/php-fpm/php-ini-dev.ini:/usr/local/etc/php/conf.d/dev.ini'
+            - './phpdocker/nginx/nginx.conf:/etc/nginx/http.d/default.conf'
+            - ./phpdocker/supervisor/supervisor.conf:/etc/supervisord.conf
+        env_file:
+            - .env
+        ports:      
+            - "80:80"
+            - '9000:9000'
+            - '9001:9001'
