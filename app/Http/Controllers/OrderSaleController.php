@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderSaleRequest;
 use App\Models\OrderSale;
 use Illuminate\Http\Request;
 
@@ -18,13 +19,9 @@ class OrderSaleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(OrderSaleRequest $request)
     {
-        $validatedData = $request->validate([
-            'customer_name' => 'required|string|min:3',
-            'total_amount' => 'required|numeric',
-            'user_id' => 'required|integer',
-        ]);
+        $request->validated();
 
         $orderSale = OrderSale::create($request->all());
         return response()->json($orderSale, 201);
@@ -41,13 +38,9 @@ class OrderSaleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(OrderSaleRequest $request, $id)
     {
-        $validatedData = $request->validate([
-            'customer_name' => 'required|string|min:3',
-            'total_amount' => 'required|numeric',
-            'user_id' => 'required|integer',
-        ]);
+        $request->validated();
 
         $orderSale = OrderSale::findOrFail($id);
         $orderSale->update($request->all());

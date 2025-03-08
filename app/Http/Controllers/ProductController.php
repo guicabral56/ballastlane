@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -18,14 +19,9 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|min:3',
-            'price' => 'required|integer',
-            'order_sale_id' => 'required|exists:order_sales,id',
-            'user_id' => 'required|exists:users,id',
-        ]);
+        $request->validated();
 
         $product = Product::create($request->all());
         return response()->json($product, 201);
@@ -42,15 +38,10 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
 
-        $validatedData = $request->validate([
-            'name' => 'required|string|min:3',
-            'price' => 'required|integer',
-            'order_sale_id' => 'required|exists:order_sales,id',
-            'user_id' => 'required|exists:users,id',
-        ]);
+        $request->validated();
 
         $product = Product::findOrFail($id);
         $product->update($request->all());

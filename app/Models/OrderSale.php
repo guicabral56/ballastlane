@@ -11,4 +11,9 @@ class OrderSale extends Model
 
     protected $table = 'order_sales';
     protected $fillable = ['customer_name', 'total_amount', 'user_id'];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'order_sale_id');
+    }
 }
