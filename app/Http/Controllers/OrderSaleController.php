@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\OrderSaleHandlerInterface;
 use App\Http\Requests\OrderSaleRequest;
-use App\Models\OrderSale;
-use Illuminate\Http\Request;
 
 class OrderSaleController extends Controller
 {
@@ -13,8 +12,8 @@ class OrderSaleController extends Controller
      */
     public function index()
     {
-        return OrderSale::all();
-    }   
+        return response()->json(app(OrderSaleHandlerInterface::class)->list());
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -23,7 +22,7 @@ class OrderSaleController extends Controller
     {
         $request->validated();
 
-        $orderSale = OrderSale::create($request->all());
+        $orderSale = app(OrderSaleHandlerInterface::class)->create($request->customer_name, $request->user_id);
         return response()->json($orderSale, 201);
     }
 
@@ -32,7 +31,7 @@ class OrderSaleController extends Controller
      */
     public function show($id)
     {
-        return OrderSale::findOrFail($id);
+        return app(OrderSaleHandlerInterface::class)->find($id);
     }
 
     /**
@@ -42,8 +41,7 @@ class OrderSaleController extends Controller
     {
         $request->validated();
 
-        $orderSale = OrderSale::findOrFail($id);
-        $orderSale->update($request->all());
+        $orderSale = app(OrderSaleHandlerInterface::class)->update($id, $request->customer_name, $request->user_id);
         return response()->json($orderSale, 200);
     }
 
@@ -52,7 +50,7 @@ class OrderSaleController extends Controller
      */
     public function destroy($id)
     {
-        OrderSale::findOrFail($id)->delete();
+        app(OrderSaleHandlerInterface::class)->delete($id);
         return response()->json(null, 204);
     }
 }

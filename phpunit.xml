@@ -8,8 +8,8 @@
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
         </testsuite>
-        <testsuite name="Domain">
-            <directory>tests/Core/Domain</directory>
+        <testsuite name="core">
+            <directory>tests/Core</directory>
         </testsuite>
         <testsuite name="Feature">
             <directory>tests/Feature</directory>

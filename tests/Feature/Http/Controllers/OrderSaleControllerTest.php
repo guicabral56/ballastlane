@@ -17,20 +17,19 @@ class OrderSaleControllerTest extends TestCase
 
         $response = $this->postJson('/api/order-sales', [
             'customer_name' => 'John Doe',
-            'total_amount' => 100.00,
             'user_id' => $user->id,
         ]);
 
         $response->assertStatus(201)
                  ->assertJson([
                      'customer_name' => 'John Doe',
-                     'total_amount' => 100.00,
+                     'total_amount' => 00,
                      'user_id' => $user->id,
                  ]);
 
         $this->assertDatabaseHas('order_sales', [
             'customer_name' => 'John Doe',
-            'total_amount' => 100.00,
+            'total_amount' => 0,
             'user_id' => $user->id,
         ]);
     }
@@ -41,8 +40,7 @@ class OrderSaleControllerTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->postJson('/api/order-sales', [
-            'customer_name' => '',
-            'total_amount' => 100.00,
+            'customer_name' => '',            
             'user_id' => $user->id,
         ]);
 

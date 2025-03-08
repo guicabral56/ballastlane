@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\ProductHandlerInterface;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -13,7 +13,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::all();
+        return response()->json(app(ProductHandlerInterface::class)->list(), 200);
     }
 
     /**
@@ -23,7 +23,13 @@ class ProductController extends Controller
     {
         $request->validated();
 
-        $product = Product::create($request->all());
+        $product = app(ProductHandlerInterface::class)->create(
+            $request->name,
+            $request->price,
+            $request->user_id,
+            $request->order_sale_id
+        );
+        
         return response()->json($product, 201);
     }
 
@@ -32,7 +38,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        return Product::findOrFail($id);
+        return app(ProductHandlerInterface::class)->find($id);
     }
 
     /**
@@ -40,10 +46,13 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, $id)
     {
-
         $request->validated();
 
-        $product = Product::findOrFail($id);
+        $product = app(ProductHandlerInterface::class)->update(
+            $id,
+            $request->name,
+            $request->price,
+        );
         $product->update($request->all());
         return response()->json($product, 200);
     }
@@ -53,7 +62,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        Product::findOrFail($id)->delete();
+        app(ProductHandlerInterface::class)->delete($id);
         return response()->json(null, 204);
     }
 }

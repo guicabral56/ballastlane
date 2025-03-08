@@ -19,7 +19,6 @@ This document provides an overview of the API routes available in the applicatio
   - **Description**: Create a new order sale.
   - **Request Body**:
     - `customer_name` (string): The name of the customer.
-    - `total_amount` (decimal): The total amount of the order sale.
     - `user_id` (integer): The ID of the user associated with the order sale.
   - **Response**: Returns the created order sale.
 
@@ -31,8 +30,6 @@ This document provides an overview of the API routes available in the applicatio
   - **Description**: Update a specific order sale by ID.
   - **Request Body**:
     - `customer_name` (string): The name of the customer.
-    - `total_amount` (decimal): The total amount of the order sale.
-    - `user_id` (integer): The ID of the user associated with the order sale.
   - **Response**: Returns the updated order sale.
 
 - **DELETE /api/order-sales/{id}**
@@ -63,18 +60,110 @@ This document provides an overview of the API routes available in the applicatio
   - **Request Body**:
     - `name` (string): The name of the product.
     - `price` (decimal): The price of the product.
-    - `order_sale_id` (integer): The ID of the order sale associated with the product.
-    - `user_id` (integer): The ID of the user associated with the product.
   - **Response**: Returns the updated product.
 
 - **DELETE /api/products/{id}**
   - **Description**: Delete a specific product by ID.
   - **Response**: Returns a 204 No Content status on successful deletion.
 
+### Running the Application
+
+To run the application, you need to have Docker and Docker Compose installed. Follow the steps below to get started:
+
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/your-repo/ballastlane.git
+    cd ballastlane
+    ```
+
+2. Build and start the Docker containers:
+    ```sh
+    docker-compose up -d
+    ```
+
+3. Install dependencies and configure the application:
+    ```sh
+    make configure
+    ```
+
+4. Run database migrations:
+    ```sh
+    make migrate
+    ```
+
+5. Seed the database (optional):
+    ```sh
+    make seed
+    ```
+
+6. Run the tests:
+    ```sh
+    make test
+    ```
+
+### Makefile Commands
+
+The Makefile provides several commands to manage the application:
+
+- `make configure`: Install dependencies and configure the application.
+- `make test`: Run the tests.
+- `make migrate`: Run database migrations.
+- `make migrate-rollback`: Rollback the last database migration.
+- `make seed`: Seed the database.
+- `make load-initial`: Run migrations and seed the database.
+- `make recreate`: Stop, remove, and recreate the Docker containers.
+
+### Curl Examples
+
+#### Register a User
+```sh
+curl -X POST http://localhost/register \
+    -H "Content-Type: application/json" \
+    -d '{
+        "name": "John Doe",
+        "email": "john@example.com",
+        "password": "password",
+        "password_confirmation": "password"
+    }'
+```
+
+#### Login a User
+```sh
+curl -X POST http://localhost/login \
+    -H "Content-Type: application/json" \
+    -d '{
+        "email": "john@example.com",
+        "password": "password"
+    }'
+```
+
+#### Create an Order Sale
+```sh
+curl -X POST http://localhost/api/order-sales \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+    -d '{
+        "customer_name": "John Doe",
+        "user_id": 1
+    }'
+```
+
+#### Create a Product
+```sh
+curl -X POST http://localhost/api/products \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+    -d '{
+        "name": "Sample Product",
+        "price": 100,
+        "order_sale_id": 1,
+        "user_id": 1
+    }'
+```
+
 ### Notes
 
 - All routes are prefixed with `/api`.
 - The `auth:sanctum` middleware is used for authentication on the `/api/user` route.
-- The `OrderSaleController` and `ProductController` handle the respective resource routes for order sales and products.
 
 This document provides a summary of the available API routes and their respective functionalities. For more details, refer to the api.php file and the respective controllers.
