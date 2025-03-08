@@ -4,9 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RegisteredUserController extends Controller
 {
@@ -15,8 +20,18 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(RegisterRequest $request)
+    public function store(Request $request): JsonResponse
     {
+        try {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+                'password' => ['required', Rules\Password::defaults()],
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -24,7 +39,8 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+        Auth::login($user);
 
-        return response()->json(['message' => 'Registered successfully']);
+        return response()->json(['message' => 'Registered successfully'], 201);
     }
 }

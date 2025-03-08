@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Models\User;
+use Auth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -14,6 +15,7 @@ class OrderSaleControllerTest extends TestCase
     public function it_can_create_an_order_sale()
     {
         $user = User::factory()->create();
+        Auth::login($user);
 
         $response = $this->postJson('/api/order-sales', [
             'customer_name' => 'John Doe',
@@ -38,6 +40,7 @@ class OrderSaleControllerTest extends TestCase
     public function it_fails_to_create_an_order_sale_with_empty_customer_name()
     {
         $user = User::factory()->create();
+        Auth::login($user);
 
         $response = $this->postJson('/api/order-sales', [
             'customer_name' => '',            
@@ -52,7 +55,8 @@ class OrderSaleControllerTest extends TestCase
     public function it_fails_to_create_an_order_sale_with_total_amount_as_text()
     {
         $user = User::factory()->create();
-
+        Auth::login($user);
+        
         $response = $this->postJson('/api/order-sales', [
             'customer_name' => 'John Doe',
             'total_amount' => 'one hundred',

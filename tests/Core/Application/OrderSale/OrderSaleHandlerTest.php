@@ -14,8 +14,9 @@ class OrderSaleHandlerTest extends TestCase
 
     public function testCreateOrderSale()
     {
-        $handler = new OrderSaleHandler();
         $user = User::factory()->create();
+        
+        $handler = new OrderSaleHandler();
         $orderSale = $handler->create('John Doe', $user->id);
 
         $this->assertInstanceOf(OrderSale::class, $orderSale);
@@ -26,14 +27,14 @@ class OrderSaleHandlerTest extends TestCase
 
     public function testUpdateOrderSale()
     {
-        $handler = new OrderSaleHandler();
         $user = User::factory()->create();
         $orderSale = OrderSale::create([
             'customer_name' => 'Jane Doe',
             'total_amount' => 0,
             'user_id' => $user->id,
         ]);
-
+        
+        $handler = new OrderSaleHandler();
         $updatedOrderSale = $handler->update($orderSale->id, 'John Doe');
 
         $this->assertEquals('John Doe', $updatedOrderSale->customer_name);
@@ -42,14 +43,14 @@ class OrderSaleHandlerTest extends TestCase
 
     public function testDeleteOrderSale()
     {
-        $handler = new OrderSaleHandler();
         $user = User::factory()->create();
         $orderSale = OrderSale::create([
             'customer_name' => 'Jane Doe',
             'total_amount' => 0,
             'user_id' => $user->id,
         ]);
-
+        
+        $handler = new OrderSaleHandler();
         $handler->delete($orderSale->id);
 
         $this->assertNull(OrderSale::find($orderSale->id));
@@ -57,14 +58,14 @@ class OrderSaleHandlerTest extends TestCase
 
     public function testListOrderSales()
     {
-        $handler = new OrderSaleHandler();
         $user = User::factory()->create();
         OrderSale::create([
             'customer_name' => 'Jane Doe',
             'total_amount' => 0,
             'user_id' => $user->id,
         ]);
-
+        
+        $handler = new OrderSaleHandler();
         $orderSales = $handler->list();
 
         $this->assertIsArray($orderSales);
@@ -73,14 +74,14 @@ class OrderSaleHandlerTest extends TestCase
 
     public function testFindOrderSale()
     {
-        $handler = new OrderSaleHandler();
         $user = User::factory()->create();
         $orderSale = OrderSale::create([
             'customer_name' => 'Jane Doe',
             'total_amount' => 0,
             'user_id' => $user->id,
         ]);
-
+        
+        $handler = new OrderSaleHandler();
         $foundOrderSale = $handler->find($orderSale->id);
 
         $this->assertInstanceOf(OrderSale::class, $foundOrderSale);

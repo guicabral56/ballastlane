@@ -17,21 +17,10 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::apiResource('order-sales', OrderSaleController::class);
-Route::apiResource('products', ProductController::class);
+require __DIR__.'/auth.php';
 
+Route::middleware('auth:sanctum')->apiResource('order-sales', OrderSaleController::class);
+Route::middleware('auth:sanctum')->apiResource('products', ProductController::class);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::post('/register', [RegisteredUserController::class, 'store'])
-    ->middleware('guest')
-    ->name('register');
-
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-    ->middleware('guest')
-    ->name('login');
-
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth:sanctum')
-    ->name('logout');

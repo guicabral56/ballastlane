@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Models\OrderSale;
 use App\Models\User;
+use Auth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -15,6 +16,7 @@ class ProductControllerTest extends TestCase
     public function it_can_create_a_product()
     {
         $user = User::factory()->create();
+        Auth::login($user);
         $orderSale = OrderSale::factory()->create();
 
         $response = $this->postJson('/api/products', [
@@ -44,6 +46,7 @@ class ProductControllerTest extends TestCase
     public function it_fails_to_create_a_product_with_empty_name()
     {
         $user = User::factory()->create();
+        Auth::login($user);
         $orderSale = OrderSale::factory()->create();
 
         $response = $this->postJson('/api/products', [
@@ -61,6 +64,7 @@ class ProductControllerTest extends TestCase
     public function it_fails_to_create_a_product_with_price_as_text()
     {
         $user = User::factory()->create();
+        Auth::login($user);
         $orderSale = OrderSale::factory()->create();
 
         $response = $this->postJson('/api/products', [
@@ -78,7 +82,7 @@ class ProductControllerTest extends TestCase
     public function it_fails_to_create_a_product_with_invalid_order_sale_id()
     {
         $user = User::factory()->create();
-
+        Auth::login($user);
         $response = $this->postJson('/api/products', [
             'name' => 'Sample Product',
             'price' => 100,
@@ -94,6 +98,8 @@ class ProductControllerTest extends TestCase
     public function it_fails_to_create_a_product_with_invalid_user_id()
     {
         $orderSale = OrderSale::factory()->create();
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
         $response = $this->postJson('/api/products', [
             'name' => 'Sample Product',

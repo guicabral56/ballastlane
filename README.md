@@ -117,31 +117,34 @@ The Makefile provides several commands to manage the application:
 
 #### Register a User
 ```sh
-curl -X POST http://localhost/register \
+curl -X POST http://localhost/api/register \
     -H "Content-Type: application/json" \
     -d '{
         "name": "John Doe",
         "email": "john@example.com",
         "password": "password",
-        "password_confirmation": "password"
     }'
 ```
 
 #### Login a User
 ```sh
-curl -X POST http://localhost/login \
+curl -X POST http://localhost/api/login \
     -H "Content-Type: application/json" \
     -d '{
         "email": "john@example.com",
         "password": "password"
     }'
 ```
+#### Logout
+```sh
+curl -X POST http://localhost/api/logout \
+    -H "Content-Type: application/json" \
+```
 
 #### Create an Order Sale
 ```sh
 curl -X POST http://localhost/api/order-sales \
     -H "Content-Type: application/json" \
-    -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
     -d '{
         "customer_name": "John Doe",
         "user_id": 1
@@ -150,9 +153,8 @@ curl -X POST http://localhost/api/order-sales \
 
 #### Create a Product
 ```sh
-curl -X POST http://localhost/api/products \
+curl -X POST http://localhost/api/product \
     -H "Content-Type: application/json" \
-    -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
     -d '{
         "name": "Sample Product",
         "price": 100,

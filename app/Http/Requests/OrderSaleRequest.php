@@ -24,7 +24,7 @@ class OrderSaleRequest extends FormRequest
         return [
             'customer_name' => 'required|string|min:3',
             'total_amount' => 'numeric',
-            'user_id' => 'required|integer',
+            'user_id' => 'required|exists:users,id',
         ];
     }
 }
