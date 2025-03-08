@@ -1,74 +1,26 @@
-### README for API Routes
+# Ballastlane Project
 
-This document provides an overview of the API routes available in the application. The routes are defined in the api.php file and are loaded by the `RouteServiceProvider` within a group assigned the "api" middleware group.
+Welcome to the Ballastlane Project! This project is a web application built with Laravel, designed to manage products and order sales. It provides a robust API for creating, updating, and managing products and order sales, with user authentication and authorization handled via Laravel Sanctum.
 
-#### Authentication
+## Features
 
-- **GET /api/user**
-  - **Middleware**: `auth:sanctum`
-  - **Description**: Retrieve the authenticated user's information.
-  - **Response**: Returns the authenticated user's details.
+- **User Authentication**: Secure user registration and login using Laravel Sanctum.
+- **Product Management**: Create, update, delete, and list products.
+- **Order Sale Management**: Create, update, delete, and list order sales.
+- **API Endpoints**: RESTful API endpoints for managing products and order sales.
+- **Validation**: Input validation for all API requests with JSON responses for validation errors.
+- **Middleware**: Middleware for handling authentication and authorization.
 
-#### Order Sales
+## Getting Started
 
-- **GET /api/order-sales**
-  - **Description**: Retrieve a list of all order sales.
-  - **Response**: Returns a JSON array of order sales.
+To get started with the Ballastlane Project, follow the instructions below.
 
-- **POST /api/order-sales**
-  - **Description**: Create a new order sale.
-  - **Request Body**:
-    - `customer_name` (string): The name of the customer.
-    - `user_id` (integer): The ID of the user associated with the order sale.
-  - **Response**: Returns the created order sale.
+### Prerequisites
 
-- **GET /api/order-sales/{id}**
-  - **Description**: Retrieve a specific order sale by ID.
-  - **Response**: Returns the details of the specified order sale.
+- Docker and Docker Compose installed on your machine.
+- Composer installed on your machine.
 
-- **PUT /api/order-sales/{id}**
-  - **Description**: Update a specific order sale by ID.
-  - **Request Body**:
-    - `customer_name` (string): The name of the customer.
-  - **Response**: Returns the updated order sale.
-
-- **DELETE /api/order-sales/{id}**
-  - **Description**: Delete a specific order sale by ID.
-  - **Response**: Returns a 204 No Content status on successful deletion.
-
-#### Products
-
-- **GET /api/products**
-  - **Description**: Retrieve a list of all products.
-  - **Response**: Returns a JSON array of products.
-
-- **POST /api/products**
-  - **Description**: Create a new product.
-  - **Request Body**:
-    - `name` (string): The name of the product.
-    - `price` (decimal): The price of the product.
-    - `order_sale_id` (integer): The ID of the order sale associated with the product.
-    - `user_id` (integer): The ID of the user associated with the product.
-  - **Response**: Returns the created product.
-
-- **GET /api/products/{id}**
-  - **Description**: Retrieve a specific product by ID.
-  - **Response**: Returns the details of the specified product.
-
-- **PUT /api/products/{id}**
-  - **Description**: Update a specific product by ID.
-  - **Request Body**:
-    - `name` (string): The name of the product.
-    - `price` (decimal): The price of the product.
-  - **Response**: Returns the updated product.
-
-- **DELETE /api/products/{id}**
-  - **Description**: Delete a specific product by ID.
-  - **Response**: Returns a 204 No Content status on successful deletion.
-
-### Running the Application
-
-To run the application, you need to have Docker and Docker Compose installed. Follow the steps below to get started:
+### Installation
 
 1. Clone the repository:
     ```sh
@@ -101,7 +53,75 @@ To run the application, you need to have Docker and Docker Compose installed. Fo
     make test
     ```
 
-### Makefile Commands
+## API Documentation
+
+The API routes are defined in the `api.php` file and are loaded by the `RouteServiceProvider` within a group assigned the "api" middleware group. Below is a summary of the available API routes and their respective functionalities.
+
+### Authentication
+
+- **GET /api/user**
+  - **Middleware**: `auth:sanctum`
+  - **Description**: Retrieve the authenticated user's information.
+  - **Response**: Returns the authenticated user's details.
+
+### Order Sales
+
+- **GET /api/order-sales**
+  - **Description**: Retrieve a list of all order sales.
+  - **Response**: Returns a JSON array of order sales.
+
+- **POST /api/order-sales**
+  - **Description**: Create a new order sale.
+  - **Request Body**:
+    - `customer_name` (string): The name of the customer.
+    - `user_id` (integer): The ID of the user associated with the order sale.
+  - **Response**: Returns the created order sale.
+
+- **GET /api/order-sales/{id}**
+  - **Description**: Retrieve a specific order sale by ID.
+  - **Response**: Returns the details of the specified order sale.
+
+- **PUT /api/order-sales/{id}**
+  - **Description**: Update a specific order sale by ID.
+  - **Request Body**:
+    - `customer_name` (string): The name of the customer.
+  - **Response**: Returns the updated order sale.
+
+- **DELETE /api/order-sales/{id}**
+  - **Description**: Delete a specific order sale by ID.
+  - **Response**: Returns a 204 No Content status on successful deletion.
+
+### Products
+
+- **GET /api/products**
+  - **Description**: Retrieve a list of all products.
+  - **Response**: Returns a JSON array of products.
+
+- **POST /api/products**
+  - **Description**: Create a new product.
+  - **Request Body**:
+    - `name` (string): The name of the product.
+    - `price` (decimal): The price of the product.
+    - `order_sale_id` (integer): The ID of the order sale associated with the product.
+    - `user_id` (integer): The ID of the user associated with the product.
+  - **Response**: Returns the created product.
+
+- **GET /api/products/{id}**
+  - **Description**: Retrieve a specific product by ID.
+  - **Response**: Returns the details of the specified product.
+
+- **PUT /api/products/{id}**
+  - **Description**: Update a specific product by ID.
+  - **Request Body**:
+    - `name` (string): The name of the product.
+    - `price` (decimal): The price of the product.
+  - **Response**: Returns the updated product.
+
+- **DELETE /api/products/{id}**
+  - **Description**: Delete a specific product by ID.
+  - **Response**: Returns a 204 No Content status on successful deletion.
+
+## Makefile Commands
 
 The Makefile provides several commands to manage the application:
 
@@ -113,59 +133,9 @@ The Makefile provides several commands to manage the application:
 - `make load-initial`: Run migrations and seed the database.
 - `make recreate`: Stop, remove, and recreate the Docker containers.
 
-### Curl Examples
-
-#### Register a User
-```sh
-curl -X POST http://localhost/api/register \
-    -H "Content-Type: application/json" \
-    -d '{
-        "name": "John Doe",
-        "email": "john@example.com",
-        "password": "password",
-    }'
-```
-
-#### Login a User
-```sh
-curl -X POST http://localhost/api/login \
-    -H "Content-Type: application/json" \
-    -d '{
-        "email": "john@example.com",
-        "password": "password"
-    }'
-```
-#### Logout
-```sh
-curl -X POST http://localhost/api/logout \
-    -H "Content-Type: application/json" \
-```
-
-#### Create an Order Sale
-```sh
-curl -X POST http://localhost/api/order-sales \
-    -H "Content-Type: application/json" \
-    -d '{
-        "customer_name": "John Doe",
-        "user_id": 1
-    }'
-```
-
-#### Create a Product
-```sh
-curl -X POST http://localhost/api/product \
-    -H "Content-Type: application/json" \
-    -d '{
-        "name": "Sample Product",
-        "price": 100,
-        "order_sale_id": 1,
-        "user_id": 1
-    }'
-```
-
-### Notes
+## Notes
 
 - All routes are prefixed with `/api`.
 - The `auth:sanctum` middleware is used for authentication on the `/api/user` route.
 
-This document provides a summary of the available API routes and their respective functionalities. For more details, refer to the api.php file and the respective controllers.
+This document provides a summary of the available API routes and their respective functionalities. For more details, refer to the `api.php` file and the respective controllers.
