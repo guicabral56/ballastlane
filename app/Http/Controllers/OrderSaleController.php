@@ -13,21 +13,19 @@ class OrderSaleController extends Controller
     public function index()
     {
         return OrderSale::all();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    }   
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'customer_name' => 'required|string|min:3',
+            'total_amount' => 'required|numeric',
+            'user_id' => 'required|integer',
+        ]);
+
         $orderSale = OrderSale::create($request->all());
         return response()->json($orderSale, 201);
     }
@@ -41,18 +39,16 @@ class OrderSaleController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
+        $validatedData = $request->validate([
+            'customer_name' => 'required|string|min:3',
+            'total_amount' => 'required|numeric',
+            'user_id' => 'required|integer',
+        ]);
+
         $orderSale = OrderSale::findOrFail($id);
         $orderSale->update($request->all());
         return response()->json($orderSale, 200);

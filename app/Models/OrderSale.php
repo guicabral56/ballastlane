@@ -9,5 +9,6 @@ class OrderSale extends Model
 {
     use HasFactory;
 
+    protected $table = 'order_sales';
     protected $fillable = ['customer_name', 'total_amount', 'user_id'];
 }
