@@ -1,12 +1,12 @@
 PWD = $(shell pwd -L)
-IMAGE = guicabral56/php81:latest
+IMAGE = ballastlane-app:latest
 CONTAINER = docker run -u root --rm -it --network=ballastlane_default -v ${PWD}:/application ${IMAGE}
 
 configure:
 	@${CONTAINER} composer update --optimize-autoloader && npm install
 
 test:
-	@${CONTAINER} php artisan test
+	@${CONTAINER} php artisan test --env=testing
 
 migrate:
 	@${CONTAINER} php artisan migrate

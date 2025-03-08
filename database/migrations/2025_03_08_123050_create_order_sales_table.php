@@ -16,6 +16,7 @@ class CreateOrderSalesTable extends Migration
             $table->id();
             $table->string('customer_name');
             $table->decimal('total_amount', 10, 2);
+            $table->date('order_date')->nullable();
             $table->foreignIdFor(\App\Models\User::class)->constrained();
             $table->timestamps();
         });
